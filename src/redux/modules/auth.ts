@@ -1,15 +1,9 @@
-import { call, put, takeEvery } from '@redux-saga/core/effects';
+import { call, put, select, takeEvery } from '@redux-saga/core/effects';
 import { push } from 'connected-react-router';
-import { Action, createActions, handleActions } from 'redux-actions';
+import { Action, handleActions } from 'redux-actions';
 import TokenService from '../../Services/TokenServices';
 import UserService from '../../Services/UserServices';
-import { LoginReqType } from '../../types';
-
-interface AuthState {
-  token: string | null;
-  loading: boolean;
-  error: Error | null;
-}
+import { AuthState, LoginReqType } from '../../types';
 
 const initialState: AuthState = {
   token: null,
@@ -19,17 +13,33 @@ const initialState: AuthState = {
 
 const prefix = 'books/auth';
 
-export const { pending, success, fail } = createActions('PENDING', 'SUCCESS', 'FAIL', { prefix });
+const PENDING = `${prefix}/PENDING`;
+const SUCCESS = `${prefix}/SUCCESS`;
+const FAIL = `${prefix}/FAIL`;
+
+const pending = () => {
+  return { type: PENDING };
+};
+
+const success = (token: string | null) => {
+  return { type: SUCCESS, payload: token };
+};
+
+const fail = (error: any) => {
+  return { type: FAIL, payload: error };
+};
+
+// export const { pending, success, fail } = createActions('PENDING', 'SUCCESS', 'FAIL', { prefix });
 
 const reducer = handleActions<AuthState, any>(
   {
-    PENDING: (state) => {
+    [PENDING]: (state) => {
       return { ...state, loading: true, error: null };
     },
-    SUCCESS: (state, action) => {
+    [SUCCESS]: (state, action) => {
       return { token: action.payload, loading: true, error: null };
     },
-    FAIL: (state, action) => {
+    [FAIL]: (state, action) => {
       return { ...state, loading: true, error: action.payload };
     },
   },
@@ -40,13 +50,24 @@ export default reducer;
 
 // saga
 
-export const { login, logout } = createActions('LOGIN', 'LOGOUT', { prefix });
+// export const { login, logout } = createActions('LOGIN', 'LOGOUT', { prefix });
+
+const LOGIN = `${prefix}/LOGIN`;
+const LOGOUT = `${prefix}/LOGOUT`;
+
+export const login = (data: any) => {
+  return { type: LOGIN, payload: data };
+};
+
+export const logout = () => {
+  return { type: LOGOUT };
+};
 
 function* loginSaga(action: Action<LoginReqType>) {
   try {
     yield put(pending());
     const token: string = yield call(UserService.login, action.payload);
-    TokenService.set(token); // 로컬 스토리지에
+    TokenService.set(token);
     yield put(success(token));
     yield put(push('/'));
   } catch (error: any) {
@@ -54,9 +75,19 @@ function* loginSaga(action: Action<LoginReqType>) {
   }
 }
 
-function* logoutSaga() {}
+function* logoutSaga() {
+  try {
+    yield put(pending());
+    const token: string = yield select((state) => state.auth.token);
+    yield call(UserService.logout, token);
+  } catch (error) {
+  } finally {
+    TokenService.remove();
+    yield put(success(null));
+  }
+}
 
 export function* authSaga() {
-  yield takeEvery(`${prefix}/LOGIN`, loginSaga);
-  yield takeEvery(`${prefix}/LOGOUT`, logoutSaga);
+  yield takeEvery(LOGIN, loginSaga);
+  yield takeEvery(LOGOUT, logoutSaga);
 }
