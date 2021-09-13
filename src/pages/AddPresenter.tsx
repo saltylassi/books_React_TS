@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default function Add() {
+export default function AddPresenter() {
   return <div>Add</div>;
 }
