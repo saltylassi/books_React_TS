@@ -29,8 +29,6 @@ const fail = (error: any) => {
   return { type: FAIL, payload: error };
 };
 
-// export const { pending, success, fail } = createActions('PENDING', 'SUCCESS', 'FAIL', { prefix });
-
 const reducer = handleActions<AuthState, any>(
   {
     [PENDING]: (state) => {
@@ -49,8 +47,6 @@ const reducer = handleActions<AuthState, any>(
 export default reducer;
 
 // saga
-
-// export const { login, logout } = createActions('LOGIN', 'LOGOUT', { prefix });
 
 const LOGIN = `${prefix}/LOGIN`;
 const LOGOUT = `${prefix}/LOGOUT`;
