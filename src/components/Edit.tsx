@@ -23,7 +23,6 @@ const Edit: React.FC<EditProps> = ({ loading, back, logout, edit, bookId }) => {
   const urlRef = useRef<Input>(null);
 
   const { target: prevBook } = useBook(bookId);
-  console.log(prevBook);
 
   const click = (bookId: number) => {
     const title = titleRef.current!.state.value;
