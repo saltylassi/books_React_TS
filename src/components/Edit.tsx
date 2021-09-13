@@ -6,6 +6,7 @@ import styles from './Edit.module.css';
 import { useRef } from 'react';
 import TextAreaType from 'rc-textarea';
 import { BookReqType } from '../types';
+import useBook from '../hooks/useBook';
 
 interface EditProps {
   loading: boolean;
@@ -20,6 +21,9 @@ const Edit: React.FC<EditProps> = ({ loading, back, logout, edit, bookId }) => {
   const messageRef = useRef<TextAreaType>(null);
   const authorRef = useRef<Input>(null);
   const urlRef = useRef<Input>(null);
+
+  const { target: prevBook } = useBook(bookId);
+  console.log(prevBook);
 
   const click = (bookId: number) => {
     const title = titleRef.current!.state.value;
@@ -56,25 +60,31 @@ const Edit: React.FC<EditProps> = ({ loading, back, logout, edit, bookId }) => {
           Title<span className={styles.required}> *</span>
         </div>
         <div className={styles.input_area}>
-          <Input placeholder="Title" className={styles.input} ref={titleRef} />
+          <Input placeholder="Title" className={styles.input} ref={titleRef} defaultValue={prevBook?.title} />
         </div>
         <div className={styles.input_comment}>
           Comment<span className={styles.required}> *</span>
         </div>
         <div className={styles.input_area}>
-          <TextArea rows={4} placeholder="Comment" className={styles.input} ref={messageRef} />
+          <TextArea
+            rows={4}
+            placeholder="Comment"
+            className={styles.input}
+            ref={messageRef}
+            defaultValue={prevBook?.message}
+          />
         </div>
         <div className={styles.input_author}>
           Author<span className={styles.required}> *</span>
         </div>
         <div>
-          <Input placeholder="Author" className={styles.input} ref={authorRef} />
+          <Input placeholder="Author" className={styles.input} ref={authorRef} defaultValue={prevBook?.author} />
         </div>
         <div className={styles.input_url}>
           URL<span className={styles.required}> *</span>
         </div>
         <div className={styles.input_area}>
-          <Input placeholder="URL" className={styles.input} ref={urlRef} />
+          <Input placeholder="URL" className={styles.input} ref={urlRef} defaultValue={prevBook?.url} />
         </div>
         <div className={styles.button_area}>
           <Button
