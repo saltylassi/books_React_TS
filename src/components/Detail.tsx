@@ -9,6 +9,7 @@ interface DetailProps {
   back: () => void;
   logout: () => void;
   target: BookType | undefined;
+  error: Error | null;
 }
 
 const Detail: React.FC<DetailProps> = ({ loading, back, logout, target }) => {

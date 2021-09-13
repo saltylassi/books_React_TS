@@ -22,6 +22,6 @@ const DetailContainer = () => {
     dispatch(LogoutSagaStart());
   }, [dispatch]);
 
-  return <Detail loading={loading} back={back} logout={logout} target={target} />;
+  return <Detail loading={loading} back={back} logout={logout} target={target} error={error} />;
 };
 export default DetailContainer;
