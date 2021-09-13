@@ -1,6 +1,6 @@
 import { Button, Layout, PageHeader, Table } from 'antd';
 import { useEffect } from 'react';
-import { BookReqType, BookType } from '../types';
+import { BookType } from '../types';
 import Book from './Book';
 import styles from './List.module.css';
 
@@ -26,7 +26,7 @@ const List: React.FC<ListProps> = ({ books, loading, getBooks, error, logout, go
     }
   }, [error, logout]);
 
-  return (
+  return loading ? null : (
     <Layout>
       <PageHeader
         title={<div>Book List</div>}

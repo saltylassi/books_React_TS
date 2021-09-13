@@ -6,23 +6,20 @@ import styles from './Edit.module.css';
 import { useRef } from 'react';
 import TextAreaType from 'rc-textarea';
 import { BookReqType } from '../types';
-import { useParams } from 'react-router';
 
 interface EditProps {
   loading: boolean;
   back: () => void;
   logout: () => void;
   edit: (bookId: number, book: BookReqType) => void;
+  bookId: number;
 }
 
-const Edit: React.FC<EditProps> = ({ loading, back, logout, edit }) => {
+const Edit: React.FC<EditProps> = ({ loading, back, logout, edit, bookId }) => {
   const titleRef = useRef<Input>(null);
   const messageRef = useRef<TextAreaType>(null);
   const authorRef = useRef<Input>(null);
   const urlRef = useRef<Input>(null);
-
-  const { id }: any = useParams();
-  const bookId = parseInt(id);
 
   const click = (bookId: number) => {
     const title = titleRef.current!.state.value;
@@ -38,7 +35,7 @@ const Edit: React.FC<EditProps> = ({ loading, back, logout, edit }) => {
     }
   };
 
-  return (
+  return loading ? null : (
     <Layout>
       <PageHeader
         onBack={back}

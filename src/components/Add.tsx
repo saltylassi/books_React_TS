@@ -39,7 +39,7 @@ const Add: React.FC<AddProps> = ({ loading, back, logout, add }) => {
     }
   };
 
-  return (
+  return loading ? null : (
     <Layout>
       <PageHeader
         onBack={back}

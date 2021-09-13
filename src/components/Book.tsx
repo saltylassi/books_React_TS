@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { BookOutlined, DeleteOutlined, EditOutlined, HomeOutlined } from '@ant-design/icons';
-import { BookReqType, BookType } from '../types';
+import { BookType } from '../types';
 import moment from 'moment';
 import { Button, Tooltip } from 'antd';
 import styles from './Book.module.css';

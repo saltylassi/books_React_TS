@@ -16,7 +16,7 @@ const Router: React.FC = () => {
       <ConnectedRouter history={history}>
         <Switch>
           <Route exact path="/edit/:id" component={EditPresenter} />
-          <Route exact path="/book/:id" component={DetailPresenter} />
+          <Route exact path="/books/:id" component={DetailPresenter} />
           <Route exact path="/add" component={AddPresenter} />
           <Route exact path="/signin" component={SigninPresenter} />
           <Route exact path="/" component={HomePresenter} />
