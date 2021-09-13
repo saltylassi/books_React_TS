@@ -2,25 +2,29 @@ import { ForkOutlined } from '@ant-design/icons';
 import { Button, Input, PageHeader, message as messageDialog } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import Layout from './Layout';
-import styles from './Add.module.css';
+import styles from './Edit.module.css';
 import { useRef } from 'react';
 import TextAreaType from 'rc-textarea';
 import { BookReqType } from '../types';
+import { useParams } from 'react-router';
 
-interface AddProps {
+interface EditProps {
   loading: boolean;
   back: () => void;
   logout: () => void;
-  add: (book: BookReqType) => void;
+  edit: (bookId: number, book: BookReqType) => void;
 }
 
-const Add: React.FC<AddProps> = ({ loading, back, logout, add }) => {
+const Edit: React.FC<EditProps> = ({ loading, back, logout, edit }) => {
   const titleRef = useRef<Input>(null);
   const messageRef = useRef<TextAreaType>(null);
   const authorRef = useRef<Input>(null);
   const urlRef = useRef<Input>(null);
 
-  const click = () => {
+  const { id }: any = useParams();
+  const bookId = parseInt(id);
+
+  const click = (bookId: number) => {
     const title = titleRef.current!.state.value;
     const message = messageRef.current!.resizableTextArea.props.value as string;
     const author = authorRef.current!.state.value;
@@ -30,12 +34,7 @@ const Add: React.FC<AddProps> = ({ loading, back, logout, add }) => {
       messageDialog.error('Please fill out all inputs');
       return;
     } else {
-      add({
-        title,
-        message,
-        author,
-        url,
-      });
+      edit(bookId, { title, message, author, url });
     }
   };
 
@@ -45,10 +44,10 @@ const Add: React.FC<AddProps> = ({ loading, back, logout, add }) => {
         onBack={back}
         title={
           <div>
-            <ForkOutlined /> Add Book
+            <ForkOutlined /> Edit Book
           </div>
         }
-        subTitle="Add Your Book"
+        subTitle="Edit Your Book"
         extra={
           <Button key="1" type="primary" onClick={logout} className={styles.button_logout}>
             Logout
@@ -81,8 +80,15 @@ const Add: React.FC<AddProps> = ({ loading, back, logout, add }) => {
           <Input placeholder="URL" className={styles.input} ref={urlRef} />
         </div>
         <div className={styles.button_area}>
-          <Button size="large" loading={loading} onClick={click} className={styles.button}>
-            Add
+          <Button
+            size="large"
+            loading={loading}
+            onClick={() => {
+              click(bookId);
+            }}
+            className={styles.button}
+          >
+            Edit
           </Button>
         </div>
       </div>
@@ -90,4 +96,4 @@ const Add: React.FC<AddProps> = ({ loading, back, logout, add }) => {
   );
 };
 
-export default Add;
+export default Edit;

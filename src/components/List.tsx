@@ -1,6 +1,6 @@
 import { Button, Layout, PageHeader, Table } from 'antd';
 import { useEffect } from 'react';
-import { BookType } from '../types';
+import { BookReqType, BookType } from '../types';
 import Book from './Book';
 import styles from './List.module.css';
 
@@ -11,9 +11,11 @@ interface ListProps {
   logout: () => void;
   getBooks: () => void;
   goAdd: () => void;
+  goEdit: (bookId: number) => void;
+  deleteBook: (bookId: number) => void;
 }
 
-const List: React.FC<ListProps> = ({ books, loading, getBooks, error, logout, goAdd }) => {
+const List: React.FC<ListProps> = ({ books, loading, getBooks, error, logout, goAdd, goEdit, deleteBook }) => {
   useEffect(() => {
     getBooks();
   }, [getBooks]);
@@ -46,7 +48,7 @@ const List: React.FC<ListProps> = ({ books, loading, getBooks, error, logout, go
             dataIndex: 'book',
             key: 'book',
             render: (text, record) => {
-              return <Book {...record} />;
+              return <Book {...record} deleteBook={deleteBook} goEdit={goEdit} />;
             },
           },
         ]}

@@ -1,13 +1,20 @@
 import { Link } from 'react-router-dom';
 import { BookOutlined, DeleteOutlined, EditOutlined, HomeOutlined } from '@ant-design/icons';
-import { BookType } from '../types';
+import { BookReqType, BookType } from '../types';
 import moment from 'moment';
 import { Button, Tooltip } from 'antd';
 import styles from './Book.module.css';
 
-interface BookProps extends BookType {}
+interface BookProps extends BookType {
+  deleteBook: (bookId: number) => void;
+  goEdit: (bookId: number) => void;
+}
 
-const Book: React.FC<BookProps> = ({ bookId, title, author, createdAt, url }) => {
+const Book: React.FC<BookProps> = ({ bookId, title, author, createdAt, url, deleteBook, goEdit }) => {
+  const handleDelete = () => {
+    deleteBook(bookId);
+  };
+
   return (
     <div className={styles.book}>
       <div className={styles.title}>
@@ -29,7 +36,15 @@ const Book: React.FC<BookProps> = ({ bookId, title, author, createdAt, url }) =>
           </a>
         </Tooltip>
         <Tooltip title="Edit">
-          <Button size="small" shape="circle" icon={<EditOutlined />} className={styles.button_edit} />
+          <Button
+            size="small"
+            shape="circle"
+            icon={<EditOutlined />}
+            className={styles.button_edit}
+            onClick={() => {
+              goEdit(bookId);
+            }}
+          />
         </Tooltip>
         <Tooltip title="Delete">
           <Button
@@ -39,6 +54,7 @@ const Book: React.FC<BookProps> = ({ bookId, title, author, createdAt, url }) =>
             danger
             icon={<DeleteOutlined />}
             className={styles.button_delete}
+            onClick={handleDelete}
           />
         </Tooltip>
       </div>

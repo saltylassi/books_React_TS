@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { BookType } from '../types';
+import { BookReqType, BookType } from '../types';
 
 const BOOK_API_URL = 'https://api.marktube.tv/v1/book';
 
@@ -12,5 +12,33 @@ export default class BookService {
     });
 
     return response?.data;
+  }
+
+  public static async addBook(token: string, book: BookReqType): Promise<BookType> {
+    const response = await axios.post(BOOK_API_URL, book, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response?.data;
+  }
+
+  public static async deleteBook(token: string, bookId: number) {
+    console.log(bookId);
+
+    await axios.delete(`${BOOK_API_URL}/${bookId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
+  public static async editBook(token: string, bookId: number, book: BookReqType) {
+    await axios.patch(`${BOOK_API_URL}/${bookId}`, book, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
 }

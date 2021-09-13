@@ -1,12 +1,12 @@
 import { goBack } from 'connected-react-router';
 import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Add from '../components/Add';
 import { BookReqType, RootState } from '../types';
 import { logout as LogoutSagaStart } from '../redux/modules/auth';
-import { addBook as addBookSagaStart } from '../redux/modules/books';
+import { editBook as editBookSagaStart } from '../redux/modules/books';
+import Edit from '../components/Edit';
 
-const AddContainer = () => {
+const EditContainer = () => {
   const loading = useSelector<RootState, boolean>((state) => state.books.loading);
   const dispatch = useDispatch();
 
@@ -18,13 +18,13 @@ const AddContainer = () => {
     dispatch(LogoutSagaStart());
   }, [dispatch]);
 
-  const add = useCallback(
-    (book: BookReqType) => {
-      dispatch(addBookSagaStart(book));
+  const edit = useCallback(
+    (bookId: number, book: BookReqType) => {
+      dispatch(editBookSagaStart(bookId, book));
     },
     [dispatch]
   );
 
-  return <Add loading={loading} back={back} logout={logout} add={add} />;
+  return <Edit loading={loading} back={back} logout={logout} edit={edit} />;
 };
-export default AddContainer;
+export default EditContainer;
