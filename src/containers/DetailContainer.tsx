@@ -1,5 +1,5 @@
 import { goBack } from 'connected-react-router';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { logout as LogoutSagaStart } from '../redux/modules/auth';
 import Detail from '../components/Detail';
@@ -12,7 +12,11 @@ const DetailContainer = () => {
   const { id }: any = useParams();
   const targetId = parseInt(id);
 
-  const { target, loading, error } = useBook(targetId);
+  const { target, loading, error, getBook } = useBook(targetId);
+
+  useEffect(() => {
+    getBook();
+  }, [getBook]);
 
   const back = useCallback(() => {
     dispatch(goBack());

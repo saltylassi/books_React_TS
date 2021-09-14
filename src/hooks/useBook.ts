@@ -1,16 +1,18 @@
-import { useSelector } from 'react-redux';
-import { BookType, RootState } from '../types';
+import { useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { BookState, RootState } from '../types';
+import { getBook as getBookSagaStart } from '../redux/modules/book';
 
 const useBook = (targetId: number) => {
-  const books = useSelector<RootState, BookType[] | null>((state) => state.books.books);
-  const loading = useSelector<RootState, boolean>((state) => state.books.loading);
-  const error = useSelector<RootState, Error | null>((state) => state.books.error);
+  const { book: target, loading, error } = useSelector<RootState, BookState>((state) => state.book);
+  const dispatch = useDispatch();
 
-  const target = books?.filter((book) => {
-    return book.bookId === targetId;
-  })[0];
+  const getBook = useCallback(() => {
+    dispatch(getBookSagaStart(targetId));
+    console.log(targetId);
+  }, [dispatch, targetId]);
 
-  return { target, loading, error };
+  return { target, loading, error, getBook };
 };
 
 export default useBook;

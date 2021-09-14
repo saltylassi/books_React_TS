@@ -8,7 +8,7 @@ interface DetailProps {
   loading: boolean;
   back: () => void;
   logout: () => void;
-  target: BookType | undefined;
+  target: BookType | null;
   error: Error | null;
 }
 
